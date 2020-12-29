@@ -28,7 +28,7 @@ public class Bookselect {
 			query += " select book_id, " ;
 			query += "        title, ";
 			query += "        pubs, ";
-			query += "        pub_date, ";
+			query += "        to_char(pub_date, 'yyyy-mm-dd')pub_date, ";
 			query += "        author_id";
 			query += " from book ";
 			
@@ -46,7 +46,7 @@ public class Bookselect {
 			    String pub_date = rs.getString("pub_date");
 			    int author_id = rs.getInt("author_id");
 			    
-			    System.out.println(bookId + "," + title + "," + pubs + "," + pub_date + "," + author_id);	
+			    System.out.println(bookId + "\t" + title + "," + pubs + "," + pub_date + "," + author_id);	
 		    }
 
 
