@@ -12,6 +12,7 @@ public class Bookupdate {
 		// 0. import java.sql.*;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
+		int count = 0;
 
 		try {
 		    // 1. JDBC 드라이버 (Oracle) 로딩
@@ -34,8 +35,7 @@ public class Bookupdate {
 			query += " update book " ;
 			query += " set title = ? ,";
 			query += "     pubs = ? ,";
-			query += "     pub_date = ? ,";
-			query += "     author_id = ? ";
+			query += "     pub_date = ? ";
 			query += " where book_id = ? ";
 			
 			pstmt = conn.prepareStatement(query);//쿼리로 만들기
@@ -43,15 +43,13 @@ public class Bookupdate {
 			pstmt.setNString(2,"비대면수업");
 			pstmt.setNString(3,"20-12-29");
 			pstmt.setInt(4,2);
-			pstmt.setInt(5,11);
 			
 			System.out.println(query);
-			
-			
-			int count = pstmt.executeUpdate();
+					
+			count = pstmt.executeUpdate(); //쿼리문 실행
 			
 		    // 4.결과처리
-			System.out.println("건이 수정되었습니다.");
+			System.out.println("건이 처리되었습니다.");
 			
 		} catch (ClassNotFoundException e) {
 		    System.out.println("error: 드라이버 로딩 실패 - " + e);

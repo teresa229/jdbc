@@ -1,4 +1,4 @@
-package com.javaex.author01;
+package com.javaex.book01;
 
 import java.util.List;
 

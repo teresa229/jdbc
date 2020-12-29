@@ -1,28 +1,52 @@
 package com.javaex.book01;
 
+import java.sql.Date;
+
 public class BookVo {
 
 	//필드
-	public int bookId;
-	public String title;
-	public String pubs;
-	public String pub_date;
-	public String author_id;
+	public int bookId, authorId;
+	public String title, pubs;
+	public Date pub_date;
 
 	
 	//생성자
 	public BookVo() {}
-	
-	public BookVo(int bookId, String title, String pubs, String pub_date, String author_id) {
-		super();
+		
+	public BookVo(String title, String pubs, String pub_date, int authorId) {
+		this.title = title;
+		this.pubs = pubs;
+		this.pub_date = pub_date;
+		this.authorId = authorId;
+	}
+
+	public BookVo(int bookId, String title, String pubs, String pub_date, String authorName) {
 		this.bookId = bookId;
 		this.title = title;
 		this.pubs = pubs;
 		this.pub_date = pub_date;
-		this.author_id = author_id;
+		this.authorName = authorName;
 	}
-	//메소드 g/s
 
+	public BookVo(int bookId, String title, String pubs, String pub_date, int author_id) {
+		this.bookId = bookId;
+		this.title = title;
+		this.pubs = pubs;
+		this.pub_date = pub_date;
+		this.authorId = authorId;
+	}
+	
+	public BookVo(int bookId, String title, String pubs, Date pub_date, int authorId, String authorName, String authorDesc) {
+		this.bookId = bookId;
+		this.title = title;
+		this.pubs = pubs;
+		this.pub_date = pub_date;
+		this.authorId = authorId;
+		this.authorName = authorName;
+		this.authorDesc = authorDesc;
+	}
+	
+	//메소드 g/s
 	public int getBookId() {
 		return bookId;
 	}
@@ -69,8 +93,5 @@ public class BookVo {
 		return "BookVo [bookId=" + bookId + ", title=" + title + ", pubs=" + pubs + ", pub_date=" + pub_date
 				+ ", author_id=" + author_id + "]";
 	}
-	
-
-
 
 }

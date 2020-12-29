@@ -1,16 +1,21 @@
 package com.javaex.book01;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import com.javaex.author01.AuthorVo;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookDao {
 
 	//필드
+	String driver = "oracle.jdbc.driver.OracleDriver";
+	String url = "jdbc:oracle:thin:@localhost:1521:xe";
+	String id = "webdb";
+	String pw = "webdb";
 	//생성자 : 디폴트만 만든다. 생략 가능. (다른 생성자가 생기면 만들어야 겠지?)
 	
 	//메소드 g/s
@@ -18,29 +23,21 @@ public class BookDao {
 	//메소드 일반
 	
 	//북 수정하기
-	public int bookUpdate(String title, String pubs, String pub_date, int author_id) {
+	public int bookUpdate(BookVo bookVo) {
 	
-	// 0. import java.sql.*;
+			// 0. import java.sql.*;
 			Connection conn = null;
 			PreparedStatement pstmt = null;
 
 			try {
 			    // 1. JDBC 드라이버 (Oracle) 로딩
-				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Class.forName(driver);
 				
 			    // 2. Connection 얻어오기
-				String url = "jdbc:oracle:thin:@localhost:1521:xe"; 
-				conn = DriverManager.getConnection(url, "webdb", "webdb");
+				//String url = "jdbc:oracle:thin:@localhost:1521:xe"; 
+				conn = DriverManager.getConnection(url, id, pw);
 
 			    // 3. SQL문 준비 / 바인딩 / 실행
-				  /*
-				  update book
-	              set title = '29년',
-	                  pubs = '비대면수업',
-	                  pub_date = '20-12-29',
-	                  author_id = '2'
-	               where book_id = 9;  */
-				
 				String query ="";
 				query += " update book " ;
 				query += " set title = ? ,";
@@ -50,19 +47,19 @@ public class BookDao {
 				query += " where book_id = ? ";
 				
 				pstmt = conn.prepareStatement(query);//쿼리로 만들기
-				pstmt.setNString(1,"29년");
-				pstmt.setNString(2,"비대면수업");
-				pstmt.setNString(3,"20-12-29");
-				pstmt.setInt(4,2);
-				pstmt.setInt(5,11);
+				
+				pstmt.setString(1, bookVo.title);
+				pstmt.setString(2, bookVo.pubs);
+				pstmt.setString(3, bookVo.pub_date);
+				pstmt.setString(4, bookVo.authorId);
+				pstmt.setInt(5, bookVo.bookId);
 				
 				System.out.println(query);
-				
 				
 				int count = pstmt.executeUpdate();
 				
 			    // 4.결과처리
-				System.out.println("건이 수정되었습니다.");
+				System.out.println("[dao]"+ count+ "건 수정");
 				
 			} catch (ClassNotFoundException e) {
 			    System.out.println("error: 드라이버 로딩 실패 - " + e);
@@ -94,25 +91,25 @@ public class BookDao {
 
 			try {
 				// 1. JDBC 드라이버 (Oracle) 로딩
-				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Class.forName(driver);
 
 				// 2. Connection 얻어오기
-				String url = "jdbc:oracle:thin:@localhost:1521:xe";
-				conn = DriverManager.getConnection(url, "webdb", "webdb");
+				//String url = "jdbc:oracle:thin:@localhost:1521:xe";
+				conn = DriverManager.getConnection(url, id, pw);
 				System.out.println("접속성공");
 				
 				// 3. SQL문 준비 / 바인딩 / 실행
 				String query = ""; // 쿼리문 문자열만들기, ? 주의
-				query += " delete from book ";
+				query += " delete book ";
 				query += " where book_id = ? ";
+				
 				pstmt = conn.prepareStatement(query); // 쿼리로 만들기
 
 				System.out.println(query);
 				
-				pstmt = conn.prepareStatement(query);
-				int count;
-				pstmt.setInt(1, bookId);// ?(물음표) 중 1번째, 순서중요
-				count = pstmt.executeUpdate(); // 쿼리문 실행
+				pstmt.setInt(1, bookId);
+				
+				int count = pstmt.executeUpdate();
 
 				// 4.결과처리
 				System.out.println("[dao]" + count + "건 삭제");
@@ -139,7 +136,7 @@ public class BookDao {
 
 		}
 	    // 북 리스트 가져오기
-		public List<BookVo> getbookList(){
+		public List<BookVo> searchBook(String search){
 			
 			List<BookVo> bookList = new ArrayList<BookVo>(); 
 			
@@ -150,36 +147,41 @@ public class BookDao {
 	
 				try {
 					// 1. JDBC 드라이버 (Oracle) 로딩
-					Class.forName("oracle.jdbc.driver.OracleDriver");
+					Class.forName(driver);
 	
 					// 2. Connection 얻어오기
-					String url = "jdbc:oracle:thin:@localhost:1521:xe";
-					conn = DriverManager.getConnection(url, "webdb", "webdb");
+					//String url = "jdbc:oracle:thin:@localhost:1521:xe";
+					conn = DriverManager.getConnection(url, id, pw);
 					System.out.println("접속성공");
 		
 					// 3. SQL문 준비 / 바인딩 / 실행
-					String query = ""; 
-					query += " select book_id, ";
-					query += "        title, ";
-					query += "        pubs, ";
-					query += "        pub_date, ";
-					query += "        author_id ";
-					query += " from book ";
+					String query = "";
+					query += "select	bo.book_id,";
+					query += " 			bo.title,";
+					query += " 			bo.pubs,";
+					query += " 			bo.pub_date,";
+					query += " 			bo.author_id,";
+					query += " 			au.author_name,";
+					query += " 			au.author_desc";
+					query += " from book bo left outer join author au ";
+					query += " on bo.author_id = au.author_id ";
+					query += " order by bo.book_id asc ";
 					
-					System.out.println(query);
-					pstmt = conn.prepareStatement(query); 
+					pstmt = conn.prepareStatement(query);
+					
+					
 					rs = pstmt.executeQuery(); 
 					
 					// 4.결과처리
 					while(rs.next()) {
 						int bookId = rs.getInt("book_id");
-						String bookName = rs.getString("title");
-						String bookPubs = rs.getString("pubs");
-						String bookPubdate = rs.getString("pub_date");
-						String bookAuthorid = rs.getString("author_id");
+						String title = rs.getString("title");
+						String pubs = rs.getString("pubs");
+						Date pubDate = rs.getDate("pub_date");
+						String authorName = rs.getString("author_name");
 						
-						BookVo vo = new BookVo(book_id, title, pubs, pub_date, author_id);
-						bookList.add(vo);
+						BookVo vo = new BookVo(bookId, title, pubs, pubDate, authorName);
+						bookVoList.add(vo);
 					}
 				
 			} catch (ClassNotFoundException e) {
@@ -216,28 +218,23 @@ public class BookDao {
 
 			try {
 			    // 1. JDBC 드라이버 (Oracle) 로딩
-				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Class.forName(driver);
 				
 			    // 2. Connection 얻어오기
-				String url = "jdbc:oracle:thin:@localhost:1521:xe"; 
-				conn = DriverManager.getConnection(url, "webdb", "webdb");
+				//String url = "jdbc:oracle:thin:@localhost:1521:xe"; 
+				conn = DriverManager.getConnection(url, id, pw);
 
 			    // 3. SQL문 준비 / 바인딩 / 실행
 			
 				String query ="";
-				query += " update book " ;
-				query += " set title = ? ,";
-				query += "     pubs = ? ,";
-				query += "     pub_date = ? ,";
-				query += "     author_id = ? ";
-				query += " where book_id = ? ";
+				query += " insert into book " ;
+				query += " values(seq_book.nextval, ?, ?, ?, ? ";
 				
 				pstmt = conn.prepareStatement(query);//쿼리로 만들기
-				pstmt.setNString(1,"29년");
-				pstmt.setNString(2,"비대면수업");
-				pstmt.setNString(3,"20-12-29");
-				pstmt.setInt(4,2);
-				pstmt.setInt(5,11);
+				pstmt.setString(1, bookVo.title);
+				pstmt.setString(2, bookVo.pubs);
+				pstmt.setString(3, bookVo.pub_date);
+				pstmt.setInt(4, bookVo.authorId);
 				
 				System.out.println(query);
 				
@@ -245,7 +242,7 @@ public class BookDao {
 				int count = pstmt.executeUpdate();
 				
 			    // 4.결과처리
-				System.out.println("건이 수정되었습니다.");
+				System.out.println("[dao]"+ count + "건 등록");
 				
 			} catch (ClassNotFoundException e) {
 			    System.out.println("error: 드라이버 로딩 실패 - " + e);
@@ -269,12 +266,4 @@ public class BookDao {
 
 		}
 
-			
-		} 
-		
-		
-		
-		
-		}
-	
 }

@@ -37,7 +37,7 @@ public class Authorinsert {
 			     
 		
 		    // 4.결과처리
-			System.out.println("건이 처리 되었습니다.");
+			System.out.println("건이 등 되었습니다.");
 
 		} catch (ClassNotFoundException e) {
 		    System.out.println("error: 드라이버 로딩 실패 - " + e);
