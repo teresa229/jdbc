@@ -1,7 +1,6 @@
 package com.javaex.book01;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,13 +15,15 @@ public class BookDao {
 	String url = "jdbc:oracle:thin:@localhost:1521:xe";
 	String id = "webdb";
 	String pw = "webdb";
+	
+	int count=0;
 	//생성자 : 디폴트만 만든다. 생략 가능. (다른 생성자가 생기면 만들어야 겠지?)
 	
 	//메소드 g/s
 	
 	//메소드 일반
 	
-	//북 수정하기
+	//북 수정하기 (update)
 	public int bookUpdate(BookVo bookVo) {
 	
 			// 0. import java.sql.*;
@@ -48,15 +49,15 @@ public class BookDao {
 				
 				pstmt = conn.prepareStatement(query);//쿼리로 만들기
 				
-				pstmt.setString(1, bookVo.title);
-				pstmt.setString(2, bookVo.pubs);
-				pstmt.setString(3, bookVo.pub_date);
-				pstmt.setString(4, bookVo.authorId);
-				pstmt.setInt(5, bookVo.bookId);
+				pstmt.setString(1, bookVo.getTitle());
+				pstmt.setString(2, bookVo.getPubs());
+				pstmt.setString(3, bookVo.getPub_date());
+				pstmt.setString(4, bookVo.getAuthor_name()); //불안
+				pstmt.setInt(5, bookVo.getBook_id());
 				
 				System.out.println(query);
 				
-				int count = pstmt.executeUpdate();
+				count = pstmt.executeUpdate();
 				
 			    // 4.결과처리
 				System.out.println("[dao]"+ count+ "건 수정");
@@ -80,10 +81,10 @@ public class BookDao {
 			    }
 
 			}
-
+			return count;
 		}
 
-	//책 삭제하기
+	//책 삭제하기 (delete)
 	public int bookDelete(int bookId) {
 	// 0. import java.sql.*;
 			Connection conn = null;
@@ -100,7 +101,7 @@ public class BookDao {
 				
 				// 3. SQL문 준비 / 바인딩 / 실행
 				String query = ""; // 쿼리문 문자열만들기, ? 주의
-				query += " delete book ";
+				query += " delete from book ";
 				query += " where book_id = ? ";
 				
 				pstmt = conn.prepareStatement(query); // 쿼리로 만들기
@@ -109,7 +110,7 @@ public class BookDao {
 				
 				pstmt.setInt(1, bookId);
 				
-				int count = pstmt.executeUpdate();
+				count = pstmt.executeUpdate();
 
 				// 4.결과처리
 				System.out.println("[dao]" + count + "건 삭제");
@@ -133,10 +134,10 @@ public class BookDao {
 				}
 
 			}
-
+			return count;
 		}
-	    // 북 리스트 가져오기
-		public List<BookVo> searchBook(String search){
+	    // 북 리스트 가져오기 (list)
+		public List<BookVo> getbookList(){
 			
 			List<BookVo> bookList = new ArrayList<BookVo>(); 
 			
@@ -169,19 +170,18 @@ public class BookDao {
 					
 					pstmt = conn.prepareStatement(query);
 					
-					
 					rs = pstmt.executeQuery(); 
 					
 					// 4.결과처리
 					while(rs.next()) {
-						int bookId = rs.getInt("book_id");
+						int book_id = rs.getInt("book_id");
 						String title = rs.getString("title");
 						String pubs = rs.getString("pubs");
-						Date pubDate = rs.getDate("pub_date");
-						String authorName = rs.getString("author_name");
+						String pub_date = rs.getString("pub_date");
+						int author_id = rs.getInt("author_id");
 						
-						BookVo vo = new BookVo(bookId, title, pubs, pubDate, authorName);
-						bookVoList.add(vo);
+						BookVo vo = new BookVo(book_id, title, pubs, pub_date, author_id);
+						bookList.add(vo);
 					}
 				
 			} catch (ClassNotFoundException e) {
@@ -192,9 +192,6 @@ public class BookDao {
 
 				// 5. 자원정리
 				try {
-					if (rs != null) {
-			            rs.close();
-			        }
 					if (pstmt != null) {
 						pstmt.close();
 					}
@@ -206,11 +203,11 @@ public class BookDao {
 				}
 
 			}
-
+			return bookList;
 		}
 		
-		//북 저장기능
-		public int bookInsert(String name, String desc) {
+		//북 저장기능 (insert)
+		public int bookInsert(BookVo bookVo) {  //String name, String desc
 			
 			// 0. import java.sql.*;
 			Connection conn = null;
@@ -228,18 +225,17 @@ public class BookDao {
 			
 				String query ="";
 				query += " insert into book " ;
-				query += " values(seq_book.nextval, ?, ?, ?, ? ";
+				query += " values(seq_book_id.nextval, ?, ?, ?, ? ) ";
 				
 				pstmt = conn.prepareStatement(query);//쿼리로 만들기
-				pstmt.setString(1, bookVo.title);
-				pstmt.setString(2, bookVo.pubs);
-				pstmt.setString(3, bookVo.pub_date);
-				pstmt.setInt(4, bookVo.authorId);
+				pstmt.setString(1, bookVo.getTitle());
+				pstmt.setString(2, bookVo.getPubs());
+				pstmt.setString(3, bookVo.getPub_date());
+				pstmt.setInt(4, bookVo.getAuthor_id());
 				
 				System.out.println(query);
-				
-				
-				int count = pstmt.executeUpdate();
+								
+				count = pstmt.executeUpdate();
 				
 			    // 4.결과처리
 				System.out.println("[dao]"+ count + "건 등록");
@@ -263,7 +259,7 @@ public class BookDao {
 			    }
 
 			}
-
+			return count;
 		}
 
 }

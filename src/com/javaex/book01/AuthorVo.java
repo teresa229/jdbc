@@ -3,47 +3,54 @@ package com.javaex.book01;
 public class AuthorVo {
 
 	//필드
-	public int authorId;
-	public String authorName;
-	public String authorDesc;
+	public int author_id;
+	public String author_name;
+	public String author_desc;
 	
 	//생성자
 	public AuthorVo() {}
 	
-	public AuthorVo(String authorName, String authorDesc) {
-		this.authorName = authorName;
-		this.authorDesc = authorDesc;
+	public AuthorVo(String author_name, String author_desc) {
+		this.author_name = author_name;
+		this.author_desc = author_desc;
 	}
 	
-	public AuthorVo(int authorId, String authorName, String authorDesc) {
-		this.authorId = authorId;
-		this.authorName = authorName;
-		this.authorDesc = authorDesc;
+	public AuthorVo(int author_id, String author_name, String author_desc) {
+		this.author_id = author_id;
+		this.author_name = author_name;
+		this.author_desc = author_desc;
+	}
+
+	public int getAuthor_id() {
+		return author_id;
+	}
+
+	public void setAuthor_id(int author_id) {
+		this.author_id = author_id;
+	}
+
+	public String getAuthor_name() {
+		return author_name;
+	}
+
+	public void setAuthor_name(String author_name) {
+		this.author_name = author_name;
+	}
+
+	public String getAuthor_desc() {
+		return author_desc;
+	}
+
+	public void setAuthor_desc(String author_desc) {
+		this.author_desc = author_desc;
+	}
+
+	@Override
+	public String toString() {
+		return "AuthorVo [author_id=" + author_id + ", author_name=" + author_name + ", author_desc=" + author_desc
+				+ "]";
 	}
 
 	//메소드 g/s
-	public int getAuthorId() {
-		return authorId;
-	}	
-	public void setAuthorId(int authorId) {
-		this.authorId = authorId;
-	}
-	public String getAuthorName() {
-		return authorName;
-	}
-	public void setAuthorName(String authorName) {
-		this.authorName = authorName;
-	}
-	public String getAuthorDesc() {
-		return authorDesc;
-	}
-	public void setAuthorDesc(String authorDesc) {
-		this.authorDesc = authorDesc;
-	}
 	
-	//메소드 일반
-	@Override
-	public String toString() {
-		return "AuthorVo [authorId=" + authorId + ", authorName=" + authorName + ", authorDesc=" + authorDesc + "]";
-	}
 }

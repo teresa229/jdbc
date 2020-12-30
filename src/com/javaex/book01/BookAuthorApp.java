@@ -22,11 +22,11 @@ public class BookAuthorApp {
 			
 		AuthorDao authorDao = new AuthorDao();
 		List<AuthorVo> authorVoList = new ArrayList<AuthorVo>();
+		
 		BookDao bookDao = new BookDao();
 		List<BookVo> bookVoList = new ArrayList<BookVo>();
 		
-		// 작가 6명 등록
-		//AuthorDao, AuthorVo 이용해서 등록
+		/* 작가 6명 등록 */ //AuthorDao, AuthorVo 이용해서 등록
 		AuthorVo author01 = new AuthorVo("이문열", "경북 영양");
 		authorDao.authorInsert(author01);
 		
@@ -46,23 +46,22 @@ public class BookAuthorApp {
 		authorDao.authorInsert(author06);
 		
 			
-		//수정
+		/* 수정 */
 		AuthorVo author07 = new AuthorVo(6, "김영하", "소설작가");
 		authorDao.authorUpdate(author07);
 		
-		//삭제
+		/* 삭제 */
 		authorDao.authorDelete(6);
 		
 		//출력확인 - 리스트
 		authorVoList = authorDao.getAuthorList();
 		System.out.println("===============작가 명단===============");
 		for(int i=0;i<authorVoList.size();i++) {
-			System.out.println(authorVoList.get(i).authorId+ ". " +authorVoList.get(i).authorName+ ", " +authorVoList.get(i).authorDesc);
+			System.out.println(authorVoList.get(i).author_id+ ". " +authorVoList.get(i).author_name+ ", " +authorVoList.get(i).author_desc);
 		}
 		
 		
-		// 책 8권 등록
-		// BookDao, BookVo 이용해서 등록
+		/* 책 8권 등록 */ // BookDao, BookVo 이용해서 등록
 		BookVo bookVo01 = new BookVo("우리들의 일그러진 영웅", "다림", "1998-02-22", 1);
 		bookDao.bookInsert(bookVo01);
 		
@@ -88,7 +87,7 @@ public class BookAuthorApp {
 		bookDao.bookInsert(bookVo08);
 		
 		
-		//수정
+		/* 수정 */
 		BookVo bookVo09 = new BookVo(1, "오직두사람", "문학동네", "2017-05-04", 1);
 		bookDao.bookUpdate(bookVo09);
 		
@@ -96,16 +95,16 @@ public class BookAuthorApp {
 		bookDao.bookUpdate(bookVo10);
 		
 		
-		//삭제
-		//bookDao.bookDelete(3);
+		/* 삭제 */
+		bookDao.bookDelete(3);
 		
 		//책을 전체 출력 *(책 -> 책정보 + 작가정보)
 		//BookVo -> 책정보 + 작가정보
 		//출력확인 - 리스트
-		bookVoList = bookDao.getBookList();
+		bookVoList = bookDao.getbookList();
 		System.out.println("===============책 리스트===============");
 		for(int i=0;i<bookVoList.size(); i++) {
-			System.out.println(bookVoList.get(i).bookId+ ". " +bookVoList.get(i).title+ ", " +bookVoList.get(i).pubs+ ", " +bookVoList.get(i).pub_date+ ", " +bookVoList.get(i).authorId+ ", " +bookVoList.get(i).authorName+ ", " +bookVoList.get(i).authorDesc);
+			System.out.println(bookVoList.get(i).book_id+ ". " +bookVoList.get(i).title+ ", " +bookVoList.get(i).pubs+ ", " +bookVoList.get(i).pub_date+ ", " +bookVoList.get(i).author_id+ ", " +bookVoList.get(i).author_name+ ", " +bookVoList.get(i).author_desc);
 		}
 	}
 	

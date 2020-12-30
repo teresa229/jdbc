@@ -48,9 +48,9 @@ public class AuthorDao {
 			
 			pstmt = conn.prepareStatement(query);
 			
-			pstmt.setString(1,authorVo.getAuthorName());
-			pstmt.setString(2,authorVo.getAuthorDesc());
-			pstmt.setInt(3,authorVo.getAuthorId());
+			pstmt.setString(1,authorVo.getAuthor_name());
+			pstmt.setString(2,authorVo.getAuthor_desc());
+			pstmt.setInt(3,authorVo.getAuthor_id());
 			
 			count = pstmt.executeUpdate(); 
 		    
@@ -224,14 +224,14 @@ public class AuthorDao {
 			    // 3. SQL문 준비 / 바인딩 / 실행
 				String query ="";
 				query += " insert into author" ;
-				query += " values(seq_author.nextval, ?, ? )";
+				query += " values(seq_author_id.nextval, ?, ? )";
 
 				System.out.println(query);
 							
 				pstmt = conn.prepareStatement(query);//쿼리로 만들기
 				
-				pstmt.setString(1, authorVo.authorName);
-				pstmt.setString(2, authorVo.authorDesc);
+				pstmt.setString(1, authorVo.author_name);
+				pstmt.setString(2, authorVo.author_desc);
 				
 				count = pstmt.executeUpdate(); //int count
 				
