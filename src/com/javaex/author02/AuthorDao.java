@@ -73,11 +73,10 @@ public class AuthorDao {
 	//작가 저장 기능 (insert)
 	public int authorInsert(AuthorVo authorVo) {
 		
-		//DB접속
-		getConnection();
-			
-
-			int count = 0;
+		    int count = 0;
+		    
+		    //DB접속
+		    getConnection();
 	
 			try {
 			    // 3. SQL문 준비 / 바인딩 / 실행
@@ -110,42 +109,42 @@ public class AuthorDao {
 	//작가 (Update)
 	public int authorUpdate(AuthorVo authorVo) { 
 		
-		int count = 0;	
+			int count = 0;	
+			
+			//DB접속
+			getConnection();
+	
 		
-		//DB접속
-		getConnection();
-
-	
-		try {
-		     // 3. SQL문 준비 / 바인딩 / 실행
-			String query ="";
-			query += " update author ";
-			query += " set author_name = ?, ";
-			query += "     author_desc = ? ";
-			query += " where author_id = ? ";
-			
-			System.out.println(query);
-			
-			pstmt = conn.prepareStatement(query);
-			
-			pstmt.setString(1,authorVo.getAuthorName());
-			pstmt.setString(2,authorVo.getAuthorDesc());
-			pstmt.setInt(3,authorVo.getAuthorId());
-			
-			count = pstmt.executeUpdate(); 
-		    
-		    // 4.결과처리
-			System.out.println("[dao]"+ count + " 건 수정");
-			
-	
-		} catch (SQLException e) {
-		    System.out.println("error:" + e);
-		} 
+			try {
+			     // 3. SQL문 준비 / 바인딩 / 실행
+				String query ="";
+				query += " update author ";
+				query += " set author_name = ?, ";
+				query += "     author_desc = ? ";
+				query += " where author_id = ? ";
+				
+				System.out.println(query);
+				
+				pstmt = conn.prepareStatement(query);
+				
+				pstmt.setString(1,authorVo.getAuthorName());
+				pstmt.setString(2,authorVo.getAuthorDesc());
+				pstmt.setInt(3,authorVo.getAuthorId());
+				
+				count = pstmt.executeUpdate(); 
+			    
+			    // 4.결과처리
+				System.out.println("[dao]"+ count + " 건 수정");
+				
 		
-		//자원정리
-		close(); //finally {}
-	
-		return count;
+			} catch (SQLException e) {
+			    System.out.println("error:" + e);
+			} 
+			
+			//자원정리
+			close(); //finally {}
+		
+			return count;
 	}
 	
 	
@@ -187,10 +186,10 @@ public class AuthorDao {
 		//작가 리스트 가져오기
 		public List<AuthorVo> getAuthorList(){
 			
-		   List<AuthorVo> authorVoList = new ArrayList<AuthorVo>();
-		
-		   //DB접속
-		   getConnection();
+			    List<AuthorVo> authorVoList = new ArrayList<AuthorVo>();
+			
+			    //DB접속
+			    getConnection();
 		   
 				try {
 				    // 3. SQL문 준비 / 바인딩 / 실행
