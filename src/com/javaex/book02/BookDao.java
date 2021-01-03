@@ -25,7 +25,7 @@ public class BookDao {
 	//메소드 g/s
 	//메소드 일반
 	
-	//DB접속
+	// DB접속
 	private void getConnection() {
 		try {
 			Class.forName(driver);
@@ -54,7 +54,7 @@ public class BookDao {
 		}
 	}
 	
-	//북 저장기능 (insert)
+	// 북 저장기능 (insert)
 	public int bookInsert(BookVo bookVo) {  //String name, String desc
 		
 			getConnection();
@@ -84,6 +84,58 @@ public class BookDao {
 			close();
 			return count;
 		}
+	
+	// 검색하기
+	public List<BookVo> BookSearch(String str){
+		List<BookVo> bookList = new ArrayList<BookVo>(); 
+		
+		getConnection();
+
+		try {
+			String query = "";
+			query += "select	bo.book_id, ";
+			query += " 			bo.title, ";
+			query += " 			bo.pubs, ";
+			query += " 			to_char(bo.pub_date, 'YYYY-MM-DD') pub_date, ";
+			query += " 			bo.author_id, ";
+			query += " 			au.author_name, ";
+			query += " 			au.author_desc ";
+			query += " from book bo, author au ";
+			query += " where bo.author_id = au.author_id ";
+			query += " and( bo.title like ? ";
+			query += " or bo.pubs like ? ";
+			query += " or au.author_name like ?) ";
+			
+			pstmt = conn.prepareStatement(query);
+			
+			pstmt.setNString(1, "%" + str + "%" );
+			pstmt.setNString(2, "%" + str + "%" );
+			pstmt.setNString(3, "%" + str + "%" );
+			
+			rs = pstmt.executeQuery(); 
+			
+			// 4.결과처리
+			while(rs.next()) {
+				int book_id = rs.getInt("book_id");
+				String title = rs.getString("title");
+				String pubs = rs.getString("pubs");
+				String pub_date = rs.getString("pub_date");
+				int author_id = rs.getInt("author_id");
+				String author_name = rs.getString("author_name");
+				String author_desc = rs.getNString("author_desc");
+				
+				BookVo vo = new BookVo(book_id, title, pubs, pub_date, author_id, author_name, author_desc);
+				bookList.add(vo);
+			}
+		
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} 
+		close();
+		return bookList;
+	}
+
+
 		
 	// 북 리스트 가져오기 (list)
 	public List<BookVo> getbookList(){
@@ -96,7 +148,7 @@ public class BookDao {
 				query += "select	bo.book_id,";
 				query += " 			bo.title,";
 				query += " 			bo.pubs,";
-				query += " 			bo.pub_date,";
+				query += " 			to_char(bo.pub_date, 'YYYY-MM-DD') pub_date,";
 				query += " 			bo.author_id,";
 				query += " 			au.author_name,";
 				query += " 			au.author_desc";
@@ -130,7 +182,7 @@ public class BookDao {
 		}
 	
 	
-	//북 수정하기 (update)
+	// 북 수정하기 (update)
 	public int bookUpdate(BookVo bookVo) {
 	
 			getConnection();
@@ -166,7 +218,7 @@ public class BookDao {
 			return count;
 		}
 
-	//책 삭제하기 (delete)
+	// 책 삭제하기 (delete)
 	public int bookDelete(int bookId) {		
 		
 		    getConnection();
@@ -193,10 +245,5 @@ public class BookDao {
 			close();
 			return count;
 		}
-    
-		
-	
-	
-	
 
 }

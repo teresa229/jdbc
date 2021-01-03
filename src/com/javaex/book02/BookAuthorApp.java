@@ -2,6 +2,7 @@ package com.javaex.book02;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class BookAuthorApp {
 
@@ -109,6 +110,19 @@ public class BookAuthorApp {
 			System.out.println(bookVoList.get(i).book_id+ ". " +bookVoList.get(i).title+ ", " +bookVoList.get(i).pubs+ ", " +bookVoList.get(i).pub_date+ ", " +bookVoList.get(i).author_id+ ", " +bookVoList.get(i).author_name+ ", " +bookVoList.get(i).author_desc);
 		}
 		
+		// 검색하기
+		Scanner sc = new Scanner(System.in);
+		System.out.print("검색할 문자를 입력하세요: ");
+		String str = sc.nextLine();
+		
+		bookVoList = bookDao.BookSearch(str);
+		
+		System.out.println("=============검색하기=============");
+		for (int i =0; i < bookVoList.size(); i++) {
+			BookVo bookvo = bookVoList.get(i);
+			System.out.println(bookVoList.get(i).book_id+ ". " +bookVoList.get(i).title+ ", " +bookVoList.get(i).pubs+ ", " +bookVoList.get(i).pub_date+ ", " +bookVoList.get(i).author_id+ ", " +bookVoList.get(i).author_name+ ", " +bookVoList.get(i).author_desc);
+		}
+		sc.close();
 	}
 	
 }
