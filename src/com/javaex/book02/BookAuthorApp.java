@@ -45,13 +45,15 @@ public class BookAuthorApp {
 		AuthorVo author06 = new AuthorVo("김영하", "알쓸신잡");
 		authorDao.authorInsert(author06);
 		
-			
+		AuthorVo author07 = new AuthorVo("테스트", "테스트");
+		authorDao.authorInsert(author07);	
+		
 		/* 수정 */
-		AuthorVo author07 = new AuthorVo(6, "김영하", "소설작가");
+		AuthorVo author08 = new AuthorVo(7, "김경아", "프로그램");
 		authorDao.authorUpdate(author07);
 		
 		/* 삭제 */
-		authorDao.authorDelete(6);
+		authorDao.authorDelete(7);
 		
 		//출력확인 - 리스트
 		authorVoList = authorDao.getAuthorList();
@@ -88,10 +90,10 @@ public class BookAuthorApp {
 		
 		
 		/* 수정 */
-		BookVo bookVo09 = new BookVo(1, "오직두사람", "문학동네", "2017-05-04", 1);
+		BookVo bookVo09 = new BookVo(1, "수학", "웅진", "2017-05-04", 1);
 		bookDao.bookUpdate(bookVo09);
 		
-		BookVo bookVo10 = new BookVo(5, "26년 ver.2020", "재미주의", "2012-02-04", 5);
+		BookVo bookVo10 = new BookVo(8, "28년", "교학사", "2012-02-04", 5);
 		bookDao.bookUpdate(bookVo10);
 		
 		
@@ -106,6 +108,7 @@ public class BookAuthorApp {
 		for(int i=0;i<bookVoList.size(); i++) {
 			System.out.println(bookVoList.get(i).book_id+ ". " +bookVoList.get(i).title+ ", " +bookVoList.get(i).pubs+ ", " +bookVoList.get(i).pub_date+ ", " +bookVoList.get(i).author_id+ ", " +bookVoList.get(i).author_name+ ", " +bookVoList.get(i).author_desc);
 		}
+		
 	}
 	
 }
